@@ -22,7 +22,7 @@ pub(crate) static CONFIG: LazyLock<Config> = LazyLock::new(|| {
 
 #[derive(Debug, Deserialize)]
 pub(crate) struct Config {
-    pub(crate) preloads: Vec<String>,
+    pub(crate) module_path: String,
     pub(crate) listen: String,
     pub(crate) offset: usize,
     pub(crate) version: String,
@@ -31,7 +31,7 @@ pub(crate) struct Config {
 impl Default for Config {
     fn default() -> Self {
         Self {
-            preloads: vec!["libgnutls.so.30".to_string(), "./libsymbols.so".to_string()],
+            module_path: "./wrapper.node".to_string(),
             listen: "127.0.0.1:8080".to_string(),
             offset: 0x5ADE220,
             version: "3.2.19-39038".to_string(),

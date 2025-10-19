@@ -10,12 +10,12 @@ use ntex::web;
 
 use crate::{
     config::CONFIG,
-    sign::{load_module, set_libs, set_offset, unload_module},
+    sign::{load_module, set_module_path, set_offset, unload_module},
 };
 
 #[ntex::main]
 async fn main() -> std::io::Result<()> {
-    set_libs(CONFIG.preloads.clone());
+    set_module_path(CONFIG.module_path.clone());
     set_offset(CONFIG.offset);
     load_module();
 

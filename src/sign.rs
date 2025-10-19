@@ -1,15 +1,14 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 // Copyright (C) 2025 Moew72 <Moew72@proton.me>
 
-use std::ffi::{CString, c_char};
+use std::ffi::CString;
 use std::mem::ManuallyDrop;
-use std::ptr::null;
 
 mod lib {
     use std::ffi::*;
     type Func = extern "C" fn(*const c_char, *const c_uchar, c_int, c_int, *mut c_uchar);
     unsafe extern "C" {
-        pub(super) static mut libs: *mut *const c_char;
+        pub(super) static mut module_path: *const c_char;
         pub(super) static mut offset: usize;
         pub(super) static mut sign: Func;
         pub(super) fn load_module() -> c_int;
@@ -17,14 +16,10 @@ mod lib {
     }
 }
 
-pub(crate) fn set_libs(libs: Vec<String>) {
-    let mut libs = libs
-        .iter()
-        .map(|x| ManuallyDrop::new(CString::new(x.as_str()).unwrap()).as_ptr())
-        .collect::<Vec<*const c_char>>();
-    libs.push(null());
+pub(crate) fn set_module_path(path: String) {
+    let path = CString::new(path.as_str()).unwrap();
     unsafe {
-        lib::libs = ManuallyDrop::new(libs).as_mut_ptr();
+        lib::module_path = ManuallyDrop::new(path).as_ptr();
     }
 }
 
@@ -41,7 +36,6 @@ pub(crate) fn load_module() {
     }
 }
 
-#[allow(unused)]
 pub(crate) fn unload_module() {
     unsafe { lib::unload_module() }
 }
@@ -56,7 +50,7 @@ pub(crate) fn sign(cmd: &str, src: &[u8], seq: i32) -> [Vec<u8>; 3] {
 
     let c_cmd = CString::new(cmd).unwrap();
     let mut buf = [0u8; 0x300];
-    let _ = unsafe {
+    unsafe {
         lib::sign(
             c_cmd.as_ptr(),
             src.as_ptr(),

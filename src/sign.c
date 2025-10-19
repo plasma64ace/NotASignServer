@@ -14,7 +14,7 @@
 
 typedef long long (*func)(char*, unsigned char*, int, int, unsigned char*);
 
-char** libs;
+char* module_path;
 uintptr_t offset;
 func sign;
 
@@ -31,17 +31,7 @@ int callback(struct dl_phdr_info* info, size_t, void*) {
 }
 
 int load_module() {
-  for (int i = 0; libs[i] != NULL; i++) {
-    void *handle = dlopen(libs[i], RTLD_LAZY | RTLD_GLOBAL);
-    if (handle) {
-      printf("Successfully preloaded: %s\n", libs[i]);
-    } else {
-      printf("Failed to preload %s: %s\n", libs[i], dlerror());
-      return 1;
-    }
-  }
-
-  module = dlopen("./wrapper.node", RTLD_LAZY);
+  module = dlopen(module_path, RTLD_LAZY);
   if (!module) {
     fprintf(stderr, "dlopen failed: %s\n", dlerror());
     return 1;

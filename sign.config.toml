@@ -1,0 +1,4 @@
+preloads = ["libgnutls.so.30", "./libsymbols.so"]
+listen = "127.0.0.1:8080"
+offset = 0x5ADE220
+version = "3.2.19-39038"

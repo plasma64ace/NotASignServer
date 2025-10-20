@@ -2,6 +2,8 @@
 
 This project can only be used on Linux.
 
+[中文](README.zh.md)
+
 ## How to use?
 
 First, go to the official website to download deb file of the QQ, and rename it to `linuxqq.deb`.

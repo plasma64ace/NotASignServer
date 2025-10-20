@@ -38,19 +38,21 @@ Enjoy!
 
 ## Docker
 
+Run in the current directory:
+
 ```sh
-docker build -t sign-server:1.2.0 .
-
-export HOSTDIR=/data/app # Or any path that you prefer
-
-mkdir $HOSTDIR
-
-cp wrapper.node sign.config.toml $HOSTDIR
-
-sed -i 's/127.0.0.1/0.0.0.0/g' $HOSTDIR/sign.config.toml
-
-docker run -d --name my-sign-server -v $HOSTDIR:/app -p 127.0.0.1:8080:8080 sign-server:1.2.0
+./build.sh [-n|--name IMAGE_NAME] [-t|--tag IMAGE_TAG]
 ```
+
+Then run:
+
+```sh
+docker run -d --name SignServer -p 127.0.0.1:8080:8080 signserver:1.0.0
+```
+
+If you specify an image name or tag, replace `signerver` or `1.0.0`.
+
+After running, an Anonymous Volume will be created. You can configure `sign.config.toml` or replace `wrapper.node` within it.
 
 ## Config
 

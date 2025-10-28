@@ -2,6 +2,8 @@
 
 This project can only be used on Linux.
 
+Public Signature Server [IPv6 Only]: http://[2404:8c80:85:8001::31]:8080/
+
 [中文](README.zh.md)
 
 ## How to use?
